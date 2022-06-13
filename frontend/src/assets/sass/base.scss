@@ -1,0 +1,153 @@
+@import 'config';
+// @import 'auth-form';
+
+
+// config 
+
+// colors 
+$formBackground: #e7e7e7;
+$teal: #2c9985;
+$lightTeal: #96ccc2;
+$whiteColor: #ffffff;
+$skyColor: #4590fd;
+$offWhiteColor-1: #eeeeee;
+// $whiteColor: #ffffff;
+// $whiteColor: #ffffff;
+
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  margin: 0;
+  padding: 0;
+}
+
+a {
+  text-decoration: none !important;
+}
+
+// auth form 
+.auth-wrapper {
+  background-color: $formBackground;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+  height: 100vh;
+  overflow: hidden;
+
+  .auth-form {
+    background: $whiteColor;
+    border-radius: 20px;
+    padding: 20px;
+    width: 40vw;
+  }
+}
+
+
+// ---------------- [ dashboard ] -----------------
+.dashboard-header {
+  background: $whiteColor
+}
+
+form.search-form {
+  background: #aaa;
+  // background: #f9fafa;
+  border-radius: 10px;
+  padding: 10px;
+
+  .search-wrapper {
+
+    input,
+    .search-btn {
+      border: none;
+      background: transparent !important;
+
+      &:focus {
+        outline: #bbb;
+      }
+    }
+  }
+}
+
+.upcoming-list {
+  background: $whiteColor;
+  border-radius: 30px;
+  padding: 10px;
+  box-shadow: 1px 10px 10px $offWhiteColor-1;
+
+  &:hover {
+    // margin-left: 10px;
+    position: relative;
+    transition: all .9s;
+    left: 20px;
+  }
+}
+
+
+// react-calender
+.react-calendar {
+  button {
+    // background: #f4f4f4 !important;
+    background: transparent !important;
+    border: none;
+    // width: 25px;
+    // height: 40px;
+    padding: 10px;
+
+    &:hover {
+      background: $skyColor  !important;
+    }
+  }
+
+  .react-calendar__navigation {
+    button {
+      width: 20%;
+    }
+  }
+
+  // .react-calendar__month-view__days {
+  //   button {
+  //     padding: 5px 10px;
+  //   }
+  // }
+}
+
+// task
+.task-list {
+  .task-item {
+    background: $whiteColor;
+    border-radius: 20px;
+    padding: 10px;
+    box-shadow: 1px 10px 10px $offWhiteColor-1,
+      -1px -2px 10px $offWhiteColor-1;
+
+    &:hover {
+      background: $skyColor;
+      transition: .3s;
+      color: $whiteColor;
+    }
+  }
+}
+
+.absolute {
+  position: absolute;
+
+  .relative {
+    position: relative
+  }
+}
+
+.reminder-content {
+  height: 80vh;
+  overflow: hidden;
+  position: relative;
+  .pagination-link {
+    bottom: 0;
+    position: absolute;
+    width: 100%
+  }
+}
