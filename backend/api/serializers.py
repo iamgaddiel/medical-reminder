@@ -22,14 +22,14 @@ class CustomUserSerializer(serializers.ModelSerializer):
         )
         user.set_password(validated_data.get('password'))
         user.save()
-        profile = Profile.objects.create(user=user)
+        Profile.objects.create(user=user)
 
         # create doctor/patient profile based on account_type
         match(user.account_type):
             case 'doctor':
-                Doctor.objects.create(profile=profile)
+                Doctor.objects.create(user=user)
             case 'patient':
-                Patient.objects.create(profile=profile)
+                Patient.objects.create(user=user)
         return user
 
 
@@ -42,3 +42,18 @@ class LoginSerializer(serializers.ModelSerializer):
                 'write_only': True
             }
         }
+
+class DoctorSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CustomUser
+        fields = [
+            'id', 
+            'username', 
+            'first_name', 
+            'last_name', 
+            'email',
+            'profile', 
+            'doctor'
+        ]
+        depth = 1
+

@@ -51,21 +51,22 @@ const Layout = () => {
           <a href="javascript:void(0)" className="closebtn" onClick={closeNav}>&times;</a>
 
           <div className="nav-link-wrapper">
-            {/* navigation */}
+            {/* SideNav */}
             <Link to="/"> <PersonOutline color='primary' /> Dashboard</Link>
             <Link to="/medication">Medication</Link>
             <Link to="/reminders"><Notifications color='primary' /> Reminders</Link>
             <Link to="/health"><QuestionAnswerOutlined color='primary' /> Health Tips</Link>
             <Link to="/doctors"><HealthAndSafetyOutlined color='primary' /> Doctors</Link>
             <Link to="#"><SettingsOutlined color='primary' /> Settings</Link>
-            {/* <Button variant="text" color="secondary" onClick={handleLogout}>
+            <Button variant="text" color="secondary">
               <SettingsOutlined color='error' />
               Logout
-            </Button> */}
+            </Button>
 
           </div>
         </div>
 
+        {/* ------------------ [ Header ] -------------- */}
         <header className='dashboard-header fixed-top'>
           <div className="d-flex justify-content-between align-items-center">
             <MenuOutlined color='primary' onClick={openNav} />

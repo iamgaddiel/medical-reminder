@@ -1,10 +1,13 @@
 from django.shortcuts import get_object_or_404, render
-from .serializers import CustomUserSerializer, LoginSerializer
+from .serializers import CustomUserSerializer, DoctorSerializer, LoginSerializer
 from core.models import CustomUser, Doctor, Patient, Profile
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
 from rest_framework.authtoken.views import ObtainAuthToken
+from rest_framework.viewsets import ModelViewSet
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 from django.contrib.auth.hashers import check_password
 
 
@@ -49,3 +52,8 @@ class Authenticate(ObtainAuthToken):
             }
         })
 
+class DoctorsViewSet(ModelViewSet):
+    permission_class = [IsAuthenticated]
+    authentication_class = [SessionAuthentication, BasicAuthentication]
+    serializer_class = DoctorSerializer
+    queryset = CustomUser.objects.filter(account_type='doctor')

@@ -1,0 +1,29 @@
+.chat{
+    position: relative;
+    height: 80vh;
+}
+
+.chat-message-box{
+    position: absolute;
+    bottom: 0;
+    width: 93%;
+    background: #ffffff;
+}
+
+.doctor-image-container{
+    width: 90px;
+    height: 90px;
+    overflow: hidden;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    top: -40px;
+    margin: auto;
+}
+
+.doctor-image-container img{
+    width: 100%;
+    height: auto;
+}

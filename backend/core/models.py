@@ -35,16 +35,16 @@ class Profile(models.Model):
 
 class Doctor(models.Model):
     id = models.UUIDField(default=uuid4, editable=False, unique=True, primary_key=True)
-    profile = models.OneToOneField(Profile, on_delete=models.CASCADE)
+    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
     certificate = models.ImageField(upload_to="doctors_certificate", default="doctors_certificate.jpg")
 
     def __str__(self) -> str:
-        return f"{self.profile.user.username} doctor's profile"
+        return f"{self.user.username} doctor's profile"
 
 class Patient(models.Model):
     id = models.UUIDField(default=uuid4, editable=False, unique=True, primary_key=True)
-    profile = models.OneToOneField(Profile, on_delete=models.CASCADE)
+    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
     allergies = models.TextField(help_text="Separate each allergy with a comma", blank=True)
 
     def __str__(self) -> str:
-        return f'{self.profile.user.username} patient profile'
+        return f'{self.user.username} patient profile'

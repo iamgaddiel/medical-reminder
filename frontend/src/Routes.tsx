@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Doctors from './pages/Doctors'
 import MedicationDetails from './pages/MedicationDetails'
 import { Route, Routes as RTs, useNavigate } from 'react-router-dom'
@@ -15,18 +15,28 @@ import HealthTips from './pages/HealthTips'
 import Home from './pages/Home'
 import Reminders from './pages/Reminders'
 import Medication from './pages/Medication'
-import { useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { User } from "./recoil_utils/atoms";
+import DoctorChat from "./pages/DoctorChat";
 
 
 
 export function Routes() {
-  const user = useRecoilValue(User)
+  const [user, setUser] = useState<{ token: string }>()
   const navigate = useNavigate()
 
-  if (user.token === "") {
-    navigate("/auth/login/", { replace: true })
-  }
+
+  useEffect(() => {
+    let userData = sessionStorage.getItem('user')
+    if (userData !== null) setUser({ token: JSON.parse(userData).token })
+
+
+    if (!user?.token) {
+      console.log("🚀 ~ file: Routes.tsx ~ line 40 ~ useEffect ~ token", user)
+      navigate("/auth/login/", { replace: true })
+    }
+  }, [])
+
 
   return <RTs>
     <Route path='/' element={<Home />}>
@@ -37,6 +47,7 @@ export function Routes() {
         <Route path='medication' element={<Medication />} />
         <Route path='medication/:medId' element={<MedicationDetails />} />
         <Route path='doctors' element={<Doctors />} />
+        <Route path='doctor/:id' element={<DoctorChat />} />
       </Route>
       <Route path='auth' element={<AuthLayout />}>
         <Route path='login' element={<Login />} />
