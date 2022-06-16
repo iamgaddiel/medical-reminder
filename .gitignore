@@ -78,6 +78,7 @@ web_modules/
 .env.test.local
 .env.production.local
 .env.local
+.env.json
 
 # parcel-bundler cache (https://parceljs.org/)
 .cache
@@ -239,6 +240,7 @@ venv/
 ENV/ 
 env.bak/ 
 venv.bak/ 
+backend/env.json
 
 # mkdocs documentation 
 /site 
@@ -270,3 +272,4 @@ GitHub.sublime-settings
 !.vscode/launch.json 
 !.vscode/extensions.json 
 .history
+backend/env.json
