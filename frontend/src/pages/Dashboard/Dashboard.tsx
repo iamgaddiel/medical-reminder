@@ -17,9 +17,26 @@ const Dashboard = () => {
   const user = useRecoilValue(User)
 
 
-  useEffect(() => {
-    getAllMedications().then(res => setInitialMedicationState(res))
-  }, [medCounter])
+  // ---------------------------------[ Functions ] -----------------------------
+  // -----------------------------------------------------------------------
+  const displayMedications = async () => {
+    try {
+      let res = await getAllMedications()
+      if (res.user) {
+        res = await getAllMedications()
+      }
+      setInitialMedicationState(res)
+      // setIsLoading(false)
+    } catch (error) {
+      console.log("🚀 ~ file: Medication.tsx ~ line 49 ~ async ~ error", error)
+    }
+  }
+
+  useEffect(
+    () => {
+      displayMedications()
+    }, [medCounter]
+  )
 
   return (
     <Container>

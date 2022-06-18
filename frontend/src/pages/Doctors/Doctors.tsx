@@ -41,7 +41,10 @@ const Doctors = () => {
                     <ListItemAvatar>
                       <Avatar />
                     </ListItemAvatar>
-                    <ListItemText primary={`${doctor?.first_name} ${doctor?.last_name}`} secondary={`@${doctor?.username}`} />
+                    <ListItemText
+                      primary={`${doctor?.first_name} ${doctor?.last_name}`}
+                      secondary={`@${doctor?.username}`}
+                    />
                   </ListItem>
                 </Link>
               ))

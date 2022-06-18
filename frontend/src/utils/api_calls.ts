@@ -16,7 +16,7 @@ const getData = async (url: string) => {
 const postData = async (url: string, data: any) => {
   //....
 }
-// -----------------------------------------------------------------
+
 
 
 type Data = {

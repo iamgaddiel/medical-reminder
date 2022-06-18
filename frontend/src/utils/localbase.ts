@@ -2,10 +2,8 @@ import Localbase from "localbase";
 
 const db = new Localbase("db");
 
-
-
-
-// ----------- [ Reminders ]--------------------
+// --------------------------------- [ Reminders ]--------------------'
+// ---------------------------------------------------------------------
 interface ReminderData {
   time?: string;
   date?: string;
@@ -46,7 +44,8 @@ export const getSingleReminder = async (key: string) => {
   }
 };
 
-// ----------------------[ Medications ]---------------
+// -----------------------------[ Medications ]-------------------------
+// ---------------------------------------------------------------------
 
 type medicationData = {
   time?: string;
@@ -77,8 +76,12 @@ export const getAllMedications = async () => {
       .orderBy("created", "desc")
       .get({ keys: true });
     return medications;
-  } catch (err) {
-    if (err) throw new Error("Could not get all medications " + err);
+  } 
+  catch (err) {
+    console.log(
+      "🚀 ~ file: localbase.ts ~ line 88 ~ getAllMedications ~ err",
+      err
+    );
   }
 };
 

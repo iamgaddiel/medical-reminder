@@ -9,7 +9,7 @@ import MedicationIcon from "../MedicationIcon";
 import { deleteMedication, updateMedication } from "../../utils/localbase";
 import { MedicationCounterAtom } from "../../recoil_utils/atoms";
 import { useRecoilState } from 'recoil'
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { OpenInFull } from "@mui/icons-material";
 
 
@@ -22,7 +22,11 @@ type Props = {
   time: string
 }
 function MedicationItem({ id, active, type, medication, time }: Props) {
+  const location = useLocation()
   const [_, setMedicationCounter] = useRecoilState(MedicationCounterAtom)
+
+  // -------------------------- [ Function ] -------------------------------
+  // -----------------------------------------------------------------------
   const handleDeleteMedication = () => {
     deleteMedication(id)
     const counter = Number(sessionStorage.getItem('medicationCounter')) - 1
@@ -40,7 +44,7 @@ function MedicationItem({ id, active, type, medication, time }: Props) {
         <MedicationIcon type={type} />
       </ListItemAvatar>
       <ListItemText primary={medication} secondary={time} />
-      <Link to={`medication/${id}`}>
+      <Link to={`${location.pathname}/${id}`}>
         <OpenInFull />
       </Link>
       <Button variant='text' color='primary' onClick={handleToggleActive}>
@@ -48,7 +52,7 @@ function MedicationItem({ id, active, type, medication, time }: Props) {
           active ? <NotificationsNoneOutlined /> : <NotificationsOffOutlined />
         }
       </Button>
-      <Button variant='text' color='secondary' onClick={handleDeleteMedication}>
+      <Button variant='text' color='secondary' onClick={ handleDeleteMedication }>
         <DeleteOutline />
       </Button>
     </ListItem>

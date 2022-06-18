@@ -58,8 +58,7 @@ const DoctorChat = () => {
     () => {
       (
         async () => {
-          let res = await getDoctorDetail(id as string)
-          console.log("🚀 ~ file: DoctorChat.tsx ~ line 21 ~ res", res)
+          const res = await getDoctorDetail(id as string)
           setDoctorDetail(res)
         }
       )()
