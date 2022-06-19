@@ -1,13 +1,86 @@
-import { Avatar, Button, List, ListItem, ListItemAvatar, ListItemText, TextField } from '@material-ui/core'
+import { Avatar, Button, FormControl, List, ListItem, ListItemAvatar, ListItemText, TextField } from '@material-ui/core'
 import { AlarmAddOutlined, DeleteOutline, PersonAddRounded } from '@material-ui/icons'
 import Pagination from '@mui/material/Pagination';
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Calender from 'react-calendar'
 import { Link } from 'react-router-dom'
+import { useRecoilState } from 'recoil';
+import ReminderItem from '../../components/ReminderItem';
+import { reminderCounterAtom } from '../../recoil_utils/atoms';
+import { addReminder, getAllReminders } from '../../utils/localbase';
+import { updateReminderCount } from '../../utils/reminder_utils';
+
+
+
+
+// -----------------------------[ Types ]-------------------------
+// ---------------------------------------------------------------------
+type Reminder = {
+    key: string,
+    data: {
+        time?: string,
+        date?: Date,
+        description?: string,
+        user?: string,
+        title: string,
+        active?: boolean,
+    }
+}
 
 const Reminders = () => {
+    // Form State
+    const [isLoading, setIsLoading] = useState(true)
+    const [title, setTitle] = useState("")
+    const [description, setDescription] = useState("")
+    const [time, setTime] = useState("")
+    const [date, setDate] = useState(new Date())
+    const [reminders, setReminder] = useState<Reminder[]>([])
+    const [reminderCounter, serReminderCounter] = useRecoilState(reminderCounterAtom)
 
-    const [calenderValue, setCalender] = useState(new Date())
+
+    // -----------------------------[ Functions ]-------------------------
+    // ---------------------------------------------------------------------
+
+    const handleReminderSubmit = () => {
+        if ((title || description || time) === "") {
+            return
+        }
+        addReminder({
+            title,
+            description,
+            time,
+            date,
+            user: "test-user",
+            active: true,
+            created: new Date().getTime()
+        })
+        const counter = updateReminderCount({ type: "increment" });
+        if (counter !== undefined) serReminderCounter(counter);
+        reloadReminders()
+    }
+
+    const reloadReminders = async () => {
+        try {
+            let res = await getAllReminders();
+            if (res.user) res = await getAllReminders();
+            setReminder(res)
+
+        } catch (err) {
+            console.log("🚀 ~ file: Reminders.tsx ~ line 36 ~ reloadReminders ~ err", err)
+        }
+    }
+
+
+    // -----------------------------[ Life Circle ]-------------------------
+    // ---------------------------------------------------------------------
+    useEffect(
+        () => {
+            reloadReminders()
+            setIsLoading(false)
+        },
+        [reminderCounter]
+    )
+
 
     return (
         <section className="row justify-content-between">
@@ -17,18 +90,23 @@ const Reminders = () => {
                         <h5>Reminders</h5>
                         <Link to=''><small className="text-primary">view all</small></Link>
                     </div>
-w
+
                     <section className="task-list mt-3">
                         <List>
-                            <ListItem>
-                                <ListItemAvatar>
-                                    <Avatar />
-                                </ListItemAvatar>
-                                <ListItemText primary='John Doe' secondary='12:00pm Thursday' />
-                                <Button variant='text' color='secondary'>
-                                    <DeleteOutline />
-                                </Button>
-                            </ListItem>
+                            {
+                                isLoading ?
+                                    <h4 className="text-muted">Fetching Reminders...</h4> :
+                                    reminders.length == 0 ?
+                                        <h5 className="text-muted">You don't have any reminders</h5> :
+                                        reminders?.map((reminder) => (
+                                            <ReminderItem
+                                                title={reminder?.data.title}
+                                                date={reminder?.data.date}
+                                                time={reminder?.data.time}
+                                                id={reminder.key}
+                                            />
+                                        ))
+                            }
                         </List>
 
 
@@ -44,18 +122,45 @@ w
             <div className="col-md-5 col-sm-12">
                 <form action="" className='border p-4 rounded-4'>
                     <h5 className="text-muted"><AlarmAddOutlined /> Add Reminder</h5>
-                    <div className='mt-1'>
-                        <TextField label='Title' variant='standard' placeholder='Title' className='w-75' />
-                    </div>
-                    <div className='mt-4'>
-                        <TextField label='Description' variant='standard' placeholder='Description' className='w-75' multiline />
-                    </div>
+                    <FormControl fullWidth className='mt-1'>
+                        <TextField
+                            label='Title'
+                            variant='standard'
+                            placeholder='Title'
+                            onChange={(e: any) => setTitle(e.target.value)}
+                        />
+                    </FormControl>
+                    <FormControl fullWidth className='mt-4'>
+                        <TextField
+                            label='Description'
+                            variant='standard'
+                            placeholder='Description'
+                            multiline
+                            onChange={(e: any) => setDescription(e.target.value)}
+                        />
+                    </FormControl>
+                    <FormControl fullWidth className='mt-4'>
+                        <label htmlFor="">Time</label>
+                        <TextField
+                            variant='standard'
+                            placeholder='Time'
+                            type="time"
+                            onChange={(e: any) => setTime(e.target.value)}
+                        />
+                    </FormControl>
                     <div className="mt-4">
-                        <Calender value={calenderValue} onChange={setCalender} />
+                        <Calender value={date} onChange={setDate} />
                     </div>
                     <div className="">
-                        <Button color='primary' variant='contained'>Save</Button>
+                        <Button
+                            color='primary'
+                            variant='contained'
+                            onClick={handleReminderSubmit}
+                        >
+                            Save
+                        </Button>
                     </div>
+
                 </form>
             </div>
         </section>

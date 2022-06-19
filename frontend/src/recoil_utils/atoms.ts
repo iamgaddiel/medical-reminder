@@ -28,3 +28,12 @@ export const User = atom({
         }
     }
 })
+
+
+// -----------------------------[ Reminders ]-------------------------
+// ---------------------------------------------------------------------
+export const reminderCounterAtom = atom({
+    key: 'reminder_counter',
+    default: 0
+})
+

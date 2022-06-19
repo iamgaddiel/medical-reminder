@@ -4,29 +4,31 @@ const db = new Localbase("db");
 
 // --------------------------------- [ Reminders ]--------------------'
 // ---------------------------------------------------------------------
-interface ReminderData {
-  time?: string;
-  date?: string;
-  description?: string;
-  user?: string;
-  active?: boolean;
+type ReminderData = {
+  time?: string,
+  date?: Date,
+  description?: string,
+  user?: string,
+  title: string,
+  active?: boolean,
+  created: number
 }
 
 export const addReminder = (data: ReminderData) =>
-  db.collection("Reminders").add(data);
+  db.collection("reminders").add(data);
 
 export const deleteReminder = (key: string) => {
-  db.collection("Reminders").doc(key).delete();
+  db.collection("reminders").doc(key).delete();
 };
 
 export const updateReminder = (key: string, data: ReminderData) => {
-  db.collection("Reminders").doc(key).update(data);
+  db.collection("reminders").doc(key).update(data);
 };
 
 export const getAllReminders = async () => {
   try {
     const Reminders = await db
-      .collection("Reminders")
+      .collection("reminders")
       .orderBy("created", "desc")
       .get({ keys: true });
     return Reminders;
@@ -66,7 +68,7 @@ export const deleteMedication = (key: string) => {
 };
 
 export const updateMedication = (key: string, data: medicationData) => {
-  db.collection("medications").doc(`${key}`).update(data);
+  db.collection("medications").doc(key).update(data);
 };
 
 export const getAllMedications = async () => {

@@ -44,14 +44,20 @@ function MedicationItem({ id, active, type, medication, time }: Props) {
         <MedicationIcon type={type} />
       </ListItemAvatar>
       <ListItemText primary={medication} secondary={time} />
+
+      {/* Show medication detail */}
       <Link to={`${location.pathname}/${id}`}>
         <OpenInFull />
       </Link>
+
+      {/* toggle notification */}
       <Button variant='text' color='primary' onClick={handleToggleActive}>
         {
           active ? <NotificationsNoneOutlined /> : <NotificationsOffOutlined />
         }
       </Button>
+
+      {/* Delete button */}
       <Button variant='text' color='secondary' onClick={ handleDeleteMedication }>
         <DeleteOutline />
       </Button>

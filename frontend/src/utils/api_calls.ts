@@ -18,7 +18,6 @@ const postData = async (url: string, data: any) => {
 }
 
 
-
 type Data = {
   first_name?: string;
   last_name?: string;
