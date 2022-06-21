@@ -4,13 +4,13 @@ import React from 'react'
 import { useRecoilState } from 'recoil'
 import { reminderCounterAtom } from '../../recoil_utils/atoms'
 import { deleteReminder } from '../../utils/localbase'
-import { updateReminderCount } from '../../utils/reminder_utils'
+import { updateItemCount } from '../../utils/utils'
 
 
 type ReminderItemType = {
-    title: string,
-    time: string,
-    date: string
+    title: string
+    time: string
+    date: Date
     id: string
 }
 const ReminderItem: React.FC<ReminderItemType> = ({ title, time, date, id }) => {
@@ -18,7 +18,7 @@ const ReminderItem: React.FC<ReminderItemType> = ({ title, time, date, id }) => 
 
     const handleReminderDelete = (id: string) => {
         deleteReminder(id)
-        const counter = updateReminderCount({ type: "decrement" });
+        const counter = updateItemCount("reminder_count", { type: "decrement" });
         if (counter !== undefined) serReminderCounter(counter);
     }
 

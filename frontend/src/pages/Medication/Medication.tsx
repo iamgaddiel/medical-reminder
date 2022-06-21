@@ -5,8 +5,9 @@ import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useRecoilState } from 'recoil'
 import MedicationItem from '../../components/MedicationItem'
-import { MedicationAtom, MedicationCounterAtom } from '../../recoil_utils/atoms'
+import { _, MedicationCounterAtom } from '../../recoil_utils/atoms'
 import { addMedication, getAllMedications } from '../../utils/localbase'
+import { updateItemCount } from '../../utils/utils'
 // import {Toast} from 'react-toastify'
 
 
@@ -39,11 +40,7 @@ const Medication = () => {
     // -----------------------------------------------------------------------
     const saveMedicationDetails = () => {
         if (
-            medicationType === 'none' ||
-            medicationName === '' ||
-            dose === '' ||
-            description === '' ||
-            time === '') {
+            medicationType === 'none' || ( medicationName && description && dose && time) === '') {
             return
         }
 
@@ -60,12 +57,9 @@ const Medication = () => {
         })
 
         // Get all medications and increment medication count by one
-        getAllMedications()
-            .then(res => {
-                const count = res.length + 1
-                sessionStorage.setItem('medicationCounter', count)
-                setMedicationCounter(count)
-            })
+        const counter = updateItemCount("medication_count", { type: "increment" });
+        if (counter !== undefined) setMedicationCounter(counter);
+        reloadMedications()
 
         // Reset input filed values
         titleField.current!.value = ""
@@ -75,16 +69,17 @@ const Medication = () => {
         medicationField.current!.value = "none"
     }
 
-    const displayMedications = async () => {
+    const reloadMedications = async () => {
         try {
-            let res = await getAllMedications()
-            if (res.user) {
-                res = await getAllMedications()
-            }
+            // if res has a user property reassign res to all medications
+            let res = await getAllMedications();
+
+            // if res has a user property reassign res to all medications
+            if (res.user) res = await getAllMedications();
             setMedicationState(res)
             setIsLoading(false)
-        } catch (error) {
-            console.log("🚀 ~ file: Medication.tsx ~ line 49 ~ async ~ error", error)
+        } catch (err) {
+            console.log("🚀 ~ file: Reminders.tsx ~ line 36 ~ reloadReminders ~ err", err)
         }
     }
 
@@ -92,7 +87,7 @@ const Medication = () => {
     // -----------------------------------------------------------------------
     useEffect(
         () => {
-            displayMedications()
+            reloadMedications()
         }, [medicationCounter]
     )
 

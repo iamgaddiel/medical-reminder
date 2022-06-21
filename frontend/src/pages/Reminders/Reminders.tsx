@@ -8,7 +8,7 @@ import { useRecoilState } from 'recoil';
 import ReminderItem from '../../components/ReminderItem';
 import { reminderCounterAtom } from '../../recoil_utils/atoms';
 import { addReminder, getAllReminders } from '../../utils/localbase';
-import { updateReminderCount } from '../../utils/reminder_utils';
+import { updateItemCount } from '../../utils/utils';
 
 
 
@@ -42,7 +42,7 @@ const Reminders = () => {
     // ---------------------------------------------------------------------
 
     const handleReminderSubmit = () => {
-        if ((title || description || time) === "") {
+        if ((title && description && time) === "") {
             return
         }
         addReminder({
@@ -54,7 +54,7 @@ const Reminders = () => {
             active: true,
             created: new Date().getTime()
         })
-        const counter = updateReminderCount({ type: "increment" });
+        const counter = updateItemCount("reminder_count", { type: "increment" });
         if (counter !== undefined) serReminderCounter(counter);
         reloadReminders()
     }

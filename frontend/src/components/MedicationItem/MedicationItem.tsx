@@ -11,6 +11,7 @@ import { MedicationCounterAtom } from "../../recoil_utils/atoms";
 import { useRecoilState } from 'recoil'
 import { Link, useLocation } from "react-router-dom";
 import { OpenInFull } from "@mui/icons-material";
+import { updateItemCount } from "../../utils/utils";
 
 
 
@@ -29,9 +30,8 @@ function MedicationItem({ id, active, type, medication, time }: Props) {
   // -----------------------------------------------------------------------
   const handleDeleteMedication = () => {
     deleteMedication(id)
-    const counter = Number(sessionStorage.getItem('medicationCounter')) - 1
-    sessionStorage.setItem('medicationCounter', String(counter))
-    setMedicationCounter(counter)
+    const counter = updateItemCount("medication_count", { type: "decrement" });
+    if (counter !== undefined) setMedicationCounter(counter);
   }
 
   const handleToggleActive = () => {
@@ -58,7 +58,7 @@ function MedicationItem({ id, active, type, medication, time }: Props) {
       </Button>
 
       {/* Delete button */}
-      <Button variant='text' color='secondary' onClick={ handleDeleteMedication }>
+      <Button variant='text' color='secondary' onClick={handleDeleteMedication}>
         <DeleteOutline />
       </Button>
     </ListItem>
