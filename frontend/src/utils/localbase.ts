@@ -5,14 +5,14 @@ const db = new Localbase("db");
 // --------------------------------- [ Reminders ]--------------------'
 // ---------------------------------------------------------------------
 type ReminderData = {
-  time?: string,
-  date?: Date,
-  description?: string,
-  user?: string,
-  title: string,
-  active?: boolean,
-  created: number
-}
+  time?: string;
+  date?: Date;
+  description?: string;
+  user?: string;
+  title: string;
+  active?: boolean;
+  created: number;
+};
 
 export const addReminder = (data: ReminderData) =>
   db.collection("reminders").add(data);
@@ -78,8 +78,7 @@ export const getAllMedications = async () => {
       .orderBy("created", "desc")
       .get({ keys: true });
     return medications;
-  } 
-  catch (err) {
+  } catch (err) {
     console.log(
       "🚀 ~ file: localbase.ts ~ line 88 ~ getAllMedications ~ err",
       err

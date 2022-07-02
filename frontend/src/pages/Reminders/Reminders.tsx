@@ -4,11 +4,11 @@ import Pagination from '@mui/material/Pagination';
 import { useEffect, useState } from 'react'
 import Calender from 'react-calendar'
 import { Link } from 'react-router-dom'
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import ReminderItem from '../../components/ReminderItem';
-import { reminderCounterAtom } from '../../recoil_utils/atoms';
+import { reminderCounterAtom, User } from '../../recoil_utils/atoms';
 import { addReminder, getAllReminders } from '../../utils/localbase';
-import { updateItemCount } from '../../utils/utils';
+import { updateItemCount } from '../../utils/localstorage_utils';
 
 
 
@@ -36,6 +36,7 @@ const Reminders = () => {
     const [date, setDate] = useState(new Date())
     const [reminders, setReminder] = useState<Reminder[]>([])
     const [reminderCounter, serReminderCounter] = useRecoilState(reminderCounterAtom)
+    const user = useRecoilValue(User)
 
 
     // -----------------------------[ Functions ]-------------------------
@@ -50,7 +51,7 @@ const Reminders = () => {
             description,
             time,
             date,
-            user: "test-user",
+            user: user?.token,
             active: true,
             created: new Date().getTime()
         })
@@ -63,6 +64,9 @@ const Reminders = () => {
         try {
             let res = await getAllReminders();
             if (res.user) res = await getAllReminders();
+
+            res = res.filter( reminder => reminder.data.user === user?.token)
+            
             setReminder(res)
 
         } catch (err) {

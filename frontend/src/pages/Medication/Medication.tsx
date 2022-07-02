@@ -3,11 +3,11 @@ import { AlarmAddOutlined } from '@material-ui/icons'
 import { Pagination } from '@mui/material'
 import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { useRecoilState } from 'recoil'
+import { useRecoilState, useRecoilValue } from 'recoil'
 import MedicationItem from '../../components/MedicationItem'
-import { _, MedicationCounterAtom } from '../../recoil_utils/atoms'
+import { _, MedicationCounterAtom, User } from '../../recoil_utils/atoms'
 import { addMedication, getAllMedications } from '../../utils/localbase'
-import { updateItemCount } from '../../utils/utils'
+import { updateItemCount } from '../../utils/localstorage_utils'
 // import {Toast} from 'react-toastify'
 
 
@@ -15,6 +15,11 @@ import { updateItemCount } from '../../utils/utils'
 
 
 const Medication = () => {
+    // ---------------------------------[ Recoil Hooks ] -----------------------------
+    // -----------------------------------------------------------------------
+    const user = useRecoilValue(User)
+
+
     // ---------------------------------[ State Hooks ] -----------------------------
     // -----------------------------------------------------------------------
     const [medicationType, setMedicationType] = useState<"pill" | "teaspoon" | "medicine" | "none">('none')
@@ -23,8 +28,8 @@ const Medication = () => {
     const [description, seeDescription] = useState('')
     const [time, setTime] = useState('')
     const [isLoading, setIsLoading] = useState(true)
-    const [medications, setMedicationState] = useState<any>([])
     const [medicationCounter, setMedicationCounter] = useRecoilState(MedicationCounterAtom)
+    let [medications, setMedicationState] = useState<any>([])
 
 
     // ---------------------------------[ Ref Hooks ] -----------------------------
@@ -39,14 +44,15 @@ const Medication = () => {
     // ---------------------------------[ Functions ] -----------------------------
     // -----------------------------------------------------------------------
     const saveMedicationDetails = () => {
+        // Check for empty input fields
         if (
-            medicationType === 'none' || ( medicationName && description && dose && time) === '') {
+            medicationType === 'none' || (medicationName && description && dose && time) === '') {
             return
         }
 
         // add medication
         addMedication({
-            user: 'test user',
+            user: user?.token,
             medication_name: medicationName,
             dose,
             description,
@@ -76,8 +82,13 @@ const Medication = () => {
 
             // if res has a user property reassign res to all medications
             if (res.user) res = await getAllMedications();
+
+            // get all medications belonging to current user
+            res = res.filter((meds: any) => meds.data.user === user?.token)
+
             setMedicationState(res)
             setIsLoading(false)
+
         } catch (err) {
             console.log("🚀 ~ file: Reminders.tsx ~ line 36 ~ reloadReminders ~ err", err)
         }
@@ -96,13 +107,14 @@ const Medication = () => {
             <div className="col-md-4 col-sm-12">
                 <section className='reminder-content'>
                     <div className="d-flex justify-content-between border-bottom">
-                        <h5>Reminders</h5>
+                        <h5>Medications</h5>
                         <Link to=''><small className="text-primary">view all</small></Link>
                     </div>
 
                     {
                         isLoading ?
                             <h5 className="text-muted mt-4">Fetching medications...</h5> :
+                            // Get medications only belonging to the current logged in user
                             medications.length === 0 ?
                                 <h5>You don't have any medication</h5> :
                                 <section className="task-list mt-3">
@@ -202,7 +214,3 @@ const Medication = () => {
 }
 
 export default Medication
-
-function useRecoilValue(MedicationAtom: any) {
-    throw new Error('Function not implemented.')
-}

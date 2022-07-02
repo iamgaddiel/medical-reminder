@@ -11,7 +11,7 @@ import { MedicationCounterAtom } from "../../recoil_utils/atoms";
 import { useRecoilState } from 'recoil'
 import { Link, useLocation } from "react-router-dom";
 import { OpenInFull } from "@mui/icons-material";
-import { updateItemCount } from "../../utils/utils";
+import { updateItemCount } from "../../utils/localstorage_utils";
 
 
 

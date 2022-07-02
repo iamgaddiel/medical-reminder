@@ -6,10 +6,12 @@ from .views import (
     save_user,
     Authenticate,
     DoctorsViewSet,
+    PatientViewSet,
 )
 
 router = DefaultRouter()
 router.register('doctors', DoctorsViewSet)
+router.register('patients', PatientViewSet)
 
 urlpatterns = [
     path('', index, name='index'),

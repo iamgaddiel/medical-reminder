@@ -57,3 +57,17 @@ class DoctorSerializer(serializers.ModelSerializer):
         ]
         depth = 1
 
+class PatientSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CustomUser
+        fields = [
+            'id', 
+            'username', 
+            'first_name', 
+            'last_name', 
+            'email',
+            'profile', 
+            'patient'
+        ]
+        depth = 1
+

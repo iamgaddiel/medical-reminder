@@ -4,7 +4,7 @@ import React from 'react'
 import { useRecoilState } from 'recoil'
 import { reminderCounterAtom } from '../../recoil_utils/atoms'
 import { deleteReminder } from '../../utils/localbase'
-import { updateItemCount } from '../../utils/utils'
+import { updateItemCount } from '../../utils/localstorage_utils'
 
 
 type ReminderItemType = {

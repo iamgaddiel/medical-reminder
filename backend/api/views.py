@@ -1,5 +1,5 @@
 from django.shortcuts import get_object_or_404, render
-from .serializers import CustomUserSerializer, DoctorSerializer, LoginSerializer
+from .serializers import CustomUserSerializer, DoctorSerializer, LoginSerializer, PatientSerializer
 from core.models import CustomUser, Doctor, Patient, Profile
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
@@ -57,3 +57,9 @@ class DoctorsViewSet(ModelViewSet):
     authentication_class = [SessionAuthentication, BasicAuthentication]
     serializer_class = DoctorSerializer
     queryset = CustomUser.objects.filter(account_type='doctor')
+
+class PatientViewSet(ModelViewSet):
+    permission_class = [IsAuthenticated]
+    authentication_class = [SessionAuthentication, BasicAuthentication]
+    serializer_class = PatientSerializer
+    queryset = CustomUser.objects.filter(account_type='patient')

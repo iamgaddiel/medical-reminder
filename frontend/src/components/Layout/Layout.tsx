@@ -1,7 +1,7 @@
 import { Avatar, Button } from '@material-ui/core'
-import { MenuOutlined, LensOutlined, PersonOutline, Notifications, PlusOneOutlined, QuestionAnswerOutlined, Settings, SettingsOutlined } from '@material-ui/icons'
+import { MenuOutlined, LensOutlined, PersonOutline, Notifications, PlusOneOutlined, QuestionAnswerOutlined, Settings, SettingsOutlined, PeopleAltOutlined } from '@material-ui/icons'
 import React, { useRef } from 'react'
-import { Outlet, Link } from 'react-router-dom'
+import { Outlet, Link, useNavigate } from 'react-router-dom'
 import { useRecoilState } from 'recoil'
 import { User } from '../../recoil_utils/atoms'
 
@@ -16,6 +16,7 @@ const Layout = () => {
   const sideNav = useRef<any>(null)
   const main = useRef<any>(null)
   const [user, setUser] = useRecoilState(User)
+  const navigate = useNavigate()
 
   const openNav = () => {
     sideNav.current.style.width = "250px";
@@ -27,22 +28,24 @@ const Layout = () => {
     main.current.style.marginLeft = "0";
   }
 
-  // const handleLogout = () => {
-  //   setUser({
-  //     'token': "",
-  //     'user_id': "",
-  //     'first_name': "",
-  //     'last_name': "",
-  //     'account_type': "",
-  //     'email': "",
-  //     'profile': {
-  //       'image': "",
-  //       'weight': "",
-  //       'height': "",
-  //       'blood_group': ""
-  //     }
-  //   })
-  // }
+  const handleLogout = () => {
+    sessionStorage.removeItem("user")
+    setUser({
+      'token': "",
+      'user_id': "",
+      'first_name': "",
+      'last_name': "",
+      'account_type': "",
+      'email': "",
+      'profile': {
+        'image': "",
+        'weight': "",
+        'height': "",
+        'blood_group': ""
+      }
+    })
+    navigate("/auth/login")
+  }
 
   return (
     <section className="wrapper">
@@ -56,9 +59,13 @@ const Layout = () => {
             <Link to="/medication">Medication</Link>
             <Link to="/reminders"><Notifications color='primary' /> Reminders</Link>
             <Link to="/health"><QuestionAnswerOutlined color='primary' /> Health Tips</Link>
-            <Link to="/doctors"><HealthAndSafetyOutlined color='primary' /> Doctors</Link>
+            {
+              user.account_type == 'patient' ?
+                <Link to="/doctors"><HealthAndSafetyOutlined color='primary' /> Doctors</Link> :
+                <Link to="/patients"><PeopleAltOutlined color='primary' /> Patients</Link>
+            }
             <Link to="#"><SettingsOutlined color='primary' /> Settings</Link>
-            <Button variant="text" color="secondary">
+            <Button variant="text" color="secondary" onClick={handleLogout}>
               <SettingsOutlined color='error' />
               Logout
             </Button>
@@ -83,7 +90,7 @@ const Layout = () => {
 
 
             <div className="d-flex align-items-center">
-              <span className='mx-3'>{user.first_name} {user.last_name}</span>
+              <span className='mx-3'>{user?.first_name} {user?.last_name}</span>
               <Avatar src={AvatarImage} className='ml-3' />
             </div>
           </div>
